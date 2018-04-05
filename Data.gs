@@ -30,7 +30,7 @@ function ComputeServerRefreshTime() {
 }
 
 function ComputeNowSec() {
-  return Date.now() / 1000;
+  return Math.floor( (new Date().getTime()) / 1000 );
 }
 
 /*function ComputeServerPing( avg_ping, client_ping ) {
@@ -39,6 +39,10 @@ function ComputeNowSec() {
   }
   return ((avg_ping * 2) + client_ping) / 3;
 }*/
+
+function ComputeVersionAsNumber( major, minor, build, revision ) {
+  return ( major * 1000000 ) + ( minor * 10000 ) + ( build * 100 ) + revision;
+}
 
 
 ////

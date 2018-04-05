@@ -7,6 +7,10 @@ function ValidateServerData( json ) {
     console.warn( "Invalid TML server data: No Port - "+JSON.stringify(json) );
     return false;
   }
+  //if( !("IsPassworded" in json) ) {
+  //  console.warn( "Invalid TML server data: No IsPassworded - "+JSON.stringify(json) );
+  //  return false;
+  //}
   if( !("Motd" in json) ) {
     console.warn( "Invalid TML server data: No Motd - "+JSON.stringify(json) );
     return false;
@@ -47,10 +51,43 @@ function ValidateServerData( json ) {
     console.warn( "Invalid TML server data: No Mods - "+JSON.stringify(json) );
     return false;
   }
+  if( !("Version" in json) ) {
+    console.warn( "Invalid TML server data: No Version - "+JSON.stringify(json) );
+    return false;
+  }
+  
+  var curr_version = ComputeVersionAsNumber(1, 4, 2, 7);
+  if( json.Version < curr_version ) {
+    console.warn( "Invalid TML server data: Version "+json.Version+" < "+curr_version+" - "+JSON.stringify(json) );
+    return false;
+  }
+  
+  for( var key in json ) {
+    switch( key ) {
+      case "ServerIP":
+      case "Port":
+      case "IsPassworded":
+      case "Motd":
+      case "WorldName":
+      case "WorldProgress":
+      case "WorldEvent":
+      case "MaxPlayerCount":
+      case "PlayerCount":
+      case "PlayerPvpCount":
+      case "TeamsCount":
+      case "AveragePing":
+      case "Mods":
+      case "Version":
+        break;
+      default:
+        console.warn("Invalid TML server data: Unrecognized field "+key);
+        return false;
+    }
+  }
   
   if( json["ServerIP"] == "127.0.0.1" || json["ServerIP"].substring(0, 7) == "192.168" ) {
     console.warn( "Invalid TML server data: Local IP server invalid - "+JSON.stringify(json) );
-    return;
+    return false;
   }
   
   return true;

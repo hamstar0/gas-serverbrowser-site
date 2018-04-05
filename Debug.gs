@@ -5,6 +5,26 @@ function DebugOutput() {
   Logger.log( "Output: "+raw_data );
 }
 
+function DebugOutputDates() {
+  var script_props = PropertiesService.getScriptProperties();
+  var servers = "";
+  var keys = script_props.getKeys();
+  
+  for( var i in keys ) {
+    var key = keys[i];
+    if( key[0] !== '!' ) { continue; }
+    
+    var server_id = script_props.getProperty( key );
+    var server_update_id = GetServerUpdateId( server_id );
+    
+    var update = script_props.getProperty( server_update_id );
+    
+    servers += server_id+" - "+update+'\n';
+  }
+  
+  Logger.log( "Output: "+servers );
+}
+
 
 function DebugClearDeadServers() {
   ClearOldServers( ComputeServerRefreshTime() );
@@ -43,23 +63,11 @@ function DebugAddTestServerData() {
     "TeamsCount":2,
     "Mods":{"Hamstar's Helpers":"1.4.0","Stamina":"2.0.0"}
   };
-  var client_data = {
-    "IsClient":true,
-    "SteamID":"5432154321",
-    "ClientIP":"124.45.6.78",
-    "ServerIP":"123.45.6.78",
-    "Port":7777,
-    "WorldName":"Test World OMG",
-    "Ping":10,
-    "IsPassworded":true,
-    "HelpersVersion":"1.0.0"
-  };
   
   doPost( {"postData":{"contents":JSON.stringify(server_data)}} );
-  doPost( {"postData":{"contents":JSON.stringify(client_data)}} );
   
-  var machine_id = GetServerMachineId( client_data );
-  var server_id = GetServerId( machine_id, client_data );
+  var machine_id = GetServerMachineId( server_data );
+  var server_id = GetServerId( machine_id, server_data );
   var server_update_id = GetServerUpdateId( server_id );
   var server_valid_id = GetServerValidationId( server_id );
   
