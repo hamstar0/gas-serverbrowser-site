@@ -21,11 +21,11 @@ function GetServerWorkId( server_id ) {
 
 ////
 
-function ComputeCacheExpireTime() {
-  return 60;  // 1 minute
+function ComputeCacheExpireMilliseconds() {
+  return 60 * 1000;  // 1 minute
 }
 
-function ComputeServerRefreshTime() {
+function ComputeServerRefreshSeconds() {
   return 60 * 15;  // 15 minutes
 }
 

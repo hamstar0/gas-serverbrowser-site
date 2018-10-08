@@ -27,7 +27,7 @@ function DebugOutputDates() {
 
 
 function DebugClearDeadServers() {
-  ClearOldServers( ComputeServerRefreshTime() );
+  ClearOldServers( ComputeServerRefreshSeconds() );
 }
 
 

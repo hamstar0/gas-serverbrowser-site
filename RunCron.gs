@@ -1,8 +1,6 @@
 function RunCron() {
-   GarbageCollectServers();
+  Utilities.sleep( 1000 );
+  
+  ClearOldServers( ComputeServerRefreshSeconds() );
 }
 
-
-function GarbageCollectServers() {
-  ClearOldServers( ComputeServerRefreshTime() );
-}

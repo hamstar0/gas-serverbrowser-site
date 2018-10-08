@@ -85,6 +85,28 @@ function ValidateServerData( json ) {
     }
   }
   
+  var full_addr = json["ServerIP"].split(":");
+  if( full_addr.length !== 2 ) {
+    return false;
+  }
+  
+  var ip_blocks = full_addr[0].split(".");
+  if( ip_blocks.length !== 4 ) {
+    return false;
+  }
+  
+  for( var i in ip_blocks ) {
+    var block = parseInt( ip_blocks[i], 10 );
+    if( block < 0 || block >= 256 ) {
+      return false;
+    }
+  }
+  
+  var port_num = parseInt( full_addr[1], 10 );
+  if( port_num < 0 || port_num >= 65536 ) {
+    return false;
+  }
+  
   if( json["ServerIP"] == "127.0.0.1" || json["ServerIP"].substring(0, 7) == "192.168" ) {
     console.warn( "Invalid TML server data: Local IP server invalid - "+JSON.stringify(json) );
     return false;
@@ -124,9 +146,24 @@ function RegisterServer( ctx, server_data ) {
   
   // Existing server
   if( valid_state === "true" ) {
-    var server_data_str = JSON.stringify( server_data );
+    var log_server_data = {
+      "ServerIP": server_data.ServerIP,
+      "Port": server_data.Port,
+      "IsPassworded": server_data.IsPassworded,
+      "Motd": server_data.Motd,
+      "WorldName": server_data.WorldName,
+      "WorldProgress": server_data.WorldProgress,
+      "WorldEvent": server_data.WorldEvent,
+      "MaxPlayerCount": server_data.MaxPlayerCount,
+      "PlayerCount": server_data.PlayerCount,
+      "PlayerPvpCount": server_data.PlayerPvpCount,
+      "TeamsCount": server_data.TeamsCount,
+      "AveragePing": server_data.AveragePing,
+      "Version": server_data.Version,
+    };
+    var log_server_data_str = JSON.stringify( log_server_data );
     
-    console.log( "Updating server "+ctx.ServerId+" - "+server_data_str );
+    console.log( "Updating server "+ctx.ServerId+" - "+log_server_data_str );
   }
   // Still being validated
   else if( valid_state === "false" ) {
